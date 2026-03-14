@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>اسألني - Light Of Christ</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; text-align: center; padding: 20px; background-color: #f0f3f5; margin: 0; }
+        
+        /* الصورة والاسم */
+        .profile-header { margin-bottom: 25px; margin-top: 10px; }
+        /* تنسيق الصورة لتظهر بشكل دائري واحترافي */
+        .profile-header img { width: 120px; height: 120px; border-radius: 50%; border: 4px solid #fff; box-shadow: 0 4px 15px rgba(0,0,0,0.1); object-fit: cover; }
+        .profile-header h2 { margin: 12px 0; color: #1a1a1a; font-size: 26px; font-weight: bold; }
+
+        /* البطاقة البيضاء */
+        .card { background: white; padding: 30px; border-radius: 25px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); max-width: 400px; margin: auto; border: 1px solid #eee; }
+        
+        /* تنسيق أزرار التليجرام */
+        .telegram-btns { display: flex; gap: 12px; justify-content: center; margin-bottom: 25px; }
+        .btn-tg { text-decoration: none; padding: 12px 15px; border-radius: 12px; font-size: 14px; font-weight: bold; transition: 0.3s; display: flex; align-items: center; gap: 8px; color: white; flex: 1; justify-content: center; }
+        .btn-bot { background-color: #0088cc; } 
+        .btn-info { background-color: #444; } 
+        .btn-tg:hover { opacity: 0.9; transform: translateY(-2px); }
+
+        /* الحقول */
+        input, textarea { width: 100%; padding: 14px; margin: 10px 0; border: 1px solid #e0e0e0; border-radius: 12px; font-family: inherit; box-sizing: border-box; background: #fafafa; transition: 0.3s; }
+        input:focus, textarea:focus { outline: none; border-color: #0088cc; background: #fff; box-shadow: 0 0 8px rgba(0,136,204,0.1); }
+        
+        /* زر الإرسال الأزرق */
+        .btn-send { background-color: #0088cc; color: white; border: none; padding: 15px; border-radius: 12px; cursor: pointer; width: 100%; font-size: 18px; font-weight: bold; transition: 0.3s; margin-top: 10px; }
+        .btn-send:hover { background-color: #0077b3; box-shadow: 0 5px 15px rgba(0,136,204,0.3); }
+
+        /* قنوات الواتساب الخضراء */
+        .whatsapp-links { margin-top: 35px; display: flex; flex-direction: column; gap: 12px; align-items: center; }
+        .wa-link { background-color: #25d366; color: white; text-decoration: none; padding: 14px 25px; border-radius: 50px; display: flex; align-items: center; width: 230px; justify-content: center; font-size: 16px; font-weight: bold; transition: 0.3s; box-shadow: 0 4px 10px rgba(37,211,102,0.2); }
+        .wa-link:hover { transform: scale(1.05); background-color: #20bd5a; }
+        .wa-link i { font-size: 22px; margin-left: 12px; }
+        
+        .footer-note { margin-top: 20px; font-size: 13px; color: #888; }
+    </style>
+</head>
+<body>
+
+    <div class="profile-header">
+        <img src="https://lh3.googleusercontent.com/pw/AP1GczOD5wY6z4rP-u79c8d5c4v2r7d5c4r9j1v2d6f7j6f7=s1000" id="profileImg" alt="Light Of Christ">
+        <h2>Light Of Christ</h2>
+    </div>
+
+    <div class="card">
+        <div class="telegram-btns">
+            <a href="https://t.me/Essaalny_bot" target="_blank" class="btn-tg btn-bot">
+                <i class="fab fa-telegram-plane"></i> تشغيل البوت
+            </a>
+            <a href="https://t.me/userinfobot" target="_blank" class="btn-tg btn-info">
+                <i class="fas fa-id-badge"></i> معرفة الـ ID
+            </a>
+        </div>
+
+        <input type="number" id="chatId" placeholder="أدخل رقم الـ Chat ID هنا" required>
+        <textarea id="questionText" placeholder="اكتب سؤالك هنا بكل صراحة..." rows="4" required></textarea>
+        
+        <button id="sendBtn" class="btn-send">إرسال السؤال</button>
+    </div>
+
+    <div class="whatsapp-links">
+        <a href="https://whatsapp.com/channel/0029Vb7KBfNIt5rqE8Uedn0p" target="_blank" class="wa-link">
+            <i class="fab fa-whatsapp"></i> القناة الأساسية
+        </a>
+        <a href="https://whatsapp.com/channel/0029Vb7Ym8MBlHpjrst9qw01" target="_blank" class="wa-link">
+            <i class="fab fa-whatsapp"></i> قناة الأسئلة
+        </a>
+    </div>
+
+    <p class="footer-note">سيتم إرسال رد الإدارة إليك عبر بوت التليجرام</p>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
+        import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
+
+        // إعدادات الفايربيس الخاصة بك
+        const firebaseConfig = {
+            apiKey: "AIzaSyDHODkkq-DF_u1KFPhd-K-Ya1yhGDcS2WE",
+            authDomain: "esaalny-3588e.firebaseapp.com",
+            projectId: "esaalny-3588e",
+            storageBucket: "esaalny-3588e.firebasestorage.app",
+            messagingSenderId: "532010630852",
+            appId: "1:532010630852:web:79e5931fa0b2ff217f1391",
+            measurementId: "G-3BT8XY8K06"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        document.getElementById('sendBtn').addEventListener('click', async () => {
+            const chatId = document.getElementById('chatId').value;
+            const questionText = document.getElementById('questionText').value;
+
+            if(chatId && questionText) {
+                try {
+                    await addDoc(collection(db, "questions"), {
+                        chatId: chatId,
+                        question: questionText,
+                        timestamp: new Date()
+                    });
+                    alert("✅ تم إرسال سؤالك! سيصلك الرد على البوت.");
+                    document.getElementById('questionText').value = '';
+                } catch (e) {
+                    console.error(e);
+                    alert("❌ حدث خطأ في الإرسال. تأكد من إعدادات Firebase.");
+                }
+            } else {
+                alert("يرجى ملء كافة الخانات.");
+            }
+        });
+    </script>
+</body>
+</html>
