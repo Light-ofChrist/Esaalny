@@ -5,10 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>اسألني - Light Of Christ</title>
     
-    <meta name="google-adsense-account" content="ca-pub-5283855307401529">
-
-    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5283855307401529" crossorigin="anonymous"></script>
-
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         body { font-family: 'Segoe UI', sans-serif; background-color: #f4f7f6; padding: 20px; text-align: center; margin: 0; }
@@ -16,10 +12,6 @@
         .logo { width: 150px; height: 150px; border-radius: 50%; margin-bottom: 15px; object-fit: cover; border: 3px solid #0088cc; }
         h1 { color: #333; margin: 5px 0; font-size: 24px; }
         h2 { color: #0088cc; font-size: 18px; margin-bottom: 20px; }
-        
-        /* مكان ظهور الإعلان التلقائي */
-        .ad-space { margin: 15px 0; min-height: 100px; background: #fafafa; border: 1px dashed #ccc; border-radius: 15px; display: flex; align-items: center; justify-content: center; font-size: 12px; color: #999; }
-
         select, input, textarea { width: 100%; padding: 12px; margin: 10px 0; border-radius: 12px; border: 1px solid #ddd; box-sizing: border-box; font-size: 16px; outline: none; }
         .hidden { display: none; }
         .btn-send { width: 100%; padding: 15px; border-radius: 12px; border: none; background: #0088cc; color: white; font-weight: bold; cursor: pointer; font-size: 18px; margin-top: 10px; transition: 0.3s; }
@@ -37,16 +29,7 @@
         <h1>Light Of Christ</h1>
         <h2>خدمة اسألني 🕊️</h2>
 
-        <div class="ad-space">
-            <ins class="adsbygoogle"
-                 style="display:block"
-                 data-ad-client="ca-pub-5283855307401529"
-                 data-ad-format="auto"
-                 data-full-width-responsive="true"></ins>
-            <script> (adsbygoogle = window.adsbygoogle || []).push({}); </script>
-        </div>
-
-        <div id="closedMessage">⚠️ اخواتنا اللذاذ 🥰🫣حصل ضغط مسدجات👀 الموقع هيوقف حبه لحد م نرد علي المسدجات اللي موجوده بدل م نتأخر عليكم 🫂🤎.</div>
+        <div id="closedMessage">⚠️ عذراً، الخدمة متوقفة مؤقتاً للرد على الرسائل الموجودة. 🫂🤎</div>
 
         <div id="serviceContent">
             <label style="display:block; text-align:right; font-weight:bold; margin-right:5px;">اختر طريقة الرد:</label>
@@ -69,20 +52,12 @@
             </div>
 
             <textarea id="question" rows="4" placeholder="اكتب سؤالك هنا بكل حرية..."></textarea>
-            
-            <div style="margin: 10px 0;">
-                <ins class="adsbygoogle"
-                     style="display:inline-block;width:300px;height:50px"
-                     data-ad-client="ca-pub-5283855307401529"></ins>
-                <script> (adsbygoogle = window.adsbygoogle || []).push({}); </script>
-            </div>
-
             <button id="submitBtn" class="btn-send" onclick="sendQuestion()">إرسال السؤال</button>
         </div>
 
         <div class="footer-links">
             <a href="https://whatsapp.com/channel/0029Vb7Ym8MBlHpjrst9qw01" target="_blank"><i class="fab fa-whatsapp"></i> قناة الأسئلة والأجوبة</a>
-            <a href="https://whatsapp.com/channel/0029Vb7KBfNIt5rqE8Uedn0p" target="_blank"><i class="fab fa-whatsapp"></i> القناة الأساسية (واتساب)</a>
+            <a href="https://whatsapp.com/channel/0029Vb7KBfNIt5rqE8Uedn0p" target="_blank"><i class="fab fa-whatsapp"></i> القناة الأساسية</a>
         </div>
     </div>
 
@@ -144,14 +119,18 @@
                 await fetch(`https://api.telegram.org/bot8326561499:AAF8y3t3Z9v2E2ryLF0gsP_gvRkZNENkmoU/sendMessage?chat_id=1797024289&text=${encodeURIComponent("🔔 سؤال جديد!\n" + qText)}`);
 
                 localStorage.setItem("lastSentTime", now);
-                alert("تم الإرسال بنجاح! شكراً لزيارتك.");
+                alert("تم الإرسال بنجاح!");
                 location.reload();
             } catch (e) { 
-                alert("خطأ! تأكد من اتصال الإنترنت."); 
+                alert("خطأ في الإرسال."); 
                 btn.disabled = false;
                 btn.innerText = "إرسال السؤال";
             }
         };
     </script>
+
+    <script src="https://pl28959264.profitablecpmratenetwork.com/23/02/64/2302640f329b36c1ef481b12ab1765a6.js"></script>
+
 </body>
 </html>
+
