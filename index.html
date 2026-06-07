@@ -3,78 +3,268 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>اسألني - Light Of Christ</title>
-    
+    <title>Light Of Christ - إسألني</title>
+    <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        body { font-family: 'Segoe UI', sans-serif; background-color: #f4f7f6; padding: 20px; text-align: center; margin: 0; }
-        .container { max-width: 450px; margin: 20px auto; background: white; padding: 30px; border-radius: 25px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
-        .logo { width: 150px; height: 150px; border-radius: 50%; margin-bottom: 15px; object-fit: cover; border: 3px solid #0088cc; }
-        h1 { color: #333; margin: 5px 0; font-size: 24px; }
-        h2 { color: #0088cc; font-size: 18px; margin-bottom: 20px; }
-        select, input, textarea { width: 100%; padding: 12px; margin: 10px 0; border-radius: 12px; border: 1px solid #ddd; box-sizing: border-box; font-size: 16px; outline: none; }
-        .hidden { display: none; }
-        .btn-send { width: 100%; padding: 15px; border-radius: 12px; border: none; background: #0088cc; color: white; font-weight: bold; cursor: pointer; font-size: 18px; margin-top: 10px; transition: 0.3s; }
-        .btn-send:disabled { background: #999 !important; cursor: not-allowed; opacity: 0.7; }
-        .helper-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px; }
-        .btn-helper { background: #555; color: white; border: none; padding: 10px 5px; border-radius: 8px; font-size: 12px; cursor: pointer; text-decoration: none; display: flex; align-items: center; justify-content: center; gap: 5px; }
-        .footer-links { margin-top: 25px; display: flex; flex-direction: column; gap: 10px; align-items: center; }
-        .footer-links a { text-decoration: none; color: #25D366; font-weight: bold; font-size: 15px; display: flex; align-items: center; gap: 8px; }
-        #closedMessage { display: none; padding: 20px; background: #fee; color: #d33; border-radius: 15px; font-weight: bold; margin-bottom: 20px; }
-        
-        /* تصميم قسم الآية المحسن */
-        .verse-box { margin-top: 25px; padding: 20px; background: #fdfdfd; border-radius: 20px; border: 2px dashed #0088cc; }
-        #bibleVerse { display: none; color: #444; font-size: 17px; font-weight: 500; font-style: italic; margin-bottom: 15px; line-height: 1.6; transition: 0.5s opacity; }
-        .btn-verse { background: #1a1a1a; color: white; border: none; padding: 12px 25px; border-radius: 12px; cursor: pointer; font-size: 15px; font-weight: bold; transition: 0.3s; }
-        .btn-verse:disabled { background: #ccc; cursor: not-allowed; }
+        :root { --main-blue: #0088cc; --bg-gray: #f4f7f6; --card-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+        * { box-sizing: border-box; }
+        body { font-family: 'Segoe UI', Tahoma, sans-serif; background-color: var(--bg-gray); padding: 10px; text-align: center; margin: 0; min-height: 100vh; }
+        .container { max-width: 600px; margin: auto; padding: 20px; }
+        .logo-img { width: 150px; height: 150px; border-radius: 50%; object-fit: cover; margin-bottom: 10px; border: 4px solid var(--main-blue); box-shadow: 0 4px 15px rgba(0,0,0,0.2); }
+        .logo { font-size: 28px; font-weight: bold; color: var(--main-blue); margin-bottom: 5px; }
+        .subtitle { color: #888; font-size: 14px; margin-bottom: 20px; }
+        .card { background: white; padding: 20px; margin-bottom: 15px; border-radius: 15px; box-shadow: var(--card-shadow); text-align: right; }
+        .input-group { margin-bottom: 15px; }
+        .input-group label { display: block; margin-bottom: 5px; font-weight: bold; color: #333; font-size: 14px; }
+        .input-group input, .input-group select, .input-group textarea {
+            width: 100%; padding: 12px; border-radius: 10px; border: 1px solid #ddd; font-size: 15px; font-family: inherit;
+        }
+        .input-group textarea { min-height: 100px; resize: vertical; }
+        .input-group .optional { color: #888; font-size: 12px; font-weight: normal; }
+        .btn { padding: 12px 30px; border-radius: 10px; border: none; cursor: pointer; font-weight: bold; font-size: 15px; transition: 0.3s; }
+        .btn-primary { background: var(--main-blue); color: white; }
+        .btn-primary:hover { background: #006bb3; }
+        .btn-success { background: #28a745; color: white; }
+        .btn-warning { background: #f39c12; color: white; }
+        .btn:disabled { opacity: 0.6; cursor: not-allowed; }
+        .verse-display { background: linear-gradient(135deg, #667eea, #764ba2); color: white; padding: 25px; border-radius: 15px; margin: 15px 0; font-size: 18px; line-height: 1.8; position: relative; }
+        .verse-display .ref { font-size: 13px; opacity: 0.8; margin-top: 10px; }
+        .share-btn-small { background: rgba(255,255,255,0.2); border: none; color: white; padding: 8px 15px; border-radius: 20px; cursor: pointer; font-size: 12px; margin-top: 10px; }
+        .status-bar { display: flex; justify-content: space-around; background: #333; color: white; padding: 12px; border-radius: 15px; margin-bottom: 15px; flex-wrap: wrap; gap: 10px; }
+        .status-bar span { font-size: 14px; }
+        .method-selector { display: flex; gap: 10px; margin-bottom: 15px; flex-wrap: wrap; }
+        .method-option { flex: 1; min-width: 80px; padding: 15px; border-radius: 10px; border: 2px solid #ddd; cursor: pointer; text-align: center; transition: 0.3s; }
+        .method-option:hover { border-color: var(--main-blue); }
+        .method-option.selected { border-color: var(--main-blue); background: #e3f2fd; }
+        .method-option i { font-size: 24px; margin-bottom: 5px; display: block; }
+        .hidden { display: none !important; }
+        .success-msg { background: #d4edda; color: #155724; padding: 15px; border-radius: 10px; margin-bottom: 15px; }
+        .error-msg { background: #f8d7da; color: #721c24; padding: 15px; border-radius: 10px; margin-bottom: 15px; }
+        .tabs { display: flex; gap: 5px; margin-bottom: 15px; overflow-x: auto; }
+        .tab { padding: 10px 15px; border-radius: 10px; border: none; background: #ddd; cursor: pointer; font-weight: bold; white-space: nowrap; }
+        .tab.active { background: var(--main-blue); color: white; }
+        .readings-list { max-height: 400px; overflow-y: auto; }
+        .reading-card { background: #f8f9fa; border-right: 4px solid var(--main-blue); padding: 12px; margin-bottom: 10px; border-radius: 8px; text-align: right; }
+        .reading-card .book-name { font-weight: bold; color: var(--main-blue); }
+        .loading { display: inline-block; width: 20px; height: 20px; border: 3px solid #f3f3f3; border-top: 3px solid var(--main-blue); border-radius: 50%; animation: spin 1s linear infinite; }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        .coins-display { background: linear-gradient(135deg, #f39c12, #e67e22); color: white; border-radius: 15px; padding: 15px; margin: 15px 0; font-size: 18px; font-weight: bold; display: flex; align-items: center; justify-content: center; gap: 10px; }
+        .coins-display i { font-size: 24px; }
+        .claim-btn { background: #28a745; color: white; border: none; padding: 10px 20px; border-radius: 10px; cursor: pointer; font-weight: bold; margin-top: 10px; }
+        .claim-btn:disabled { background: #6c757d; }
+        .reading-popup { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); display: none; justify-content: center; align-items: center; z-index: 4000; }
+        .reading-popup-content { background: white; padding: 30px; border-radius: 20px; max-width: 400px; width: 90%; text-align: right; }
+        .reading-popup input, .reading-popup select { width: 100%; padding: 12px; margin: 8px 0; border-radius: 10px; border: 1px solid #ddd; box-sizing: border-box; font-size: 15px; }
+        .device-info { font-size: 11px; color: #999; margin-top: 5px; }
+        .required { color: #dc3545; }
+        .closed-message { background: linear-gradient(135deg, #ff6b6b, #ee5a5a); color: white; padding: 30px; border-radius: 20px; font-size: 20px; font-weight: bold; line-height: 1.8; margin: 20px 0; text-align: center; }
+        .links-bar { display: flex; justify-content: center; gap: 15px; margin-top: 20px; flex-wrap: wrap; }
+        .links-bar a { color: var(--main-blue); text-decoration: none; font-weight: bold; font-size: 16px; padding: 10px 20px; background: white; border-radius: 10px; box-shadow: var(--card-shadow); transition: 0.3s; }
+        .links-bar a:hover { background: var(--main-blue); color: white; }
+        .question-timer { background: #fff3cd; border: 2px solid #f39c12; border-radius: 15px; padding: 15px; margin: 15px 0; font-size: 16px; font-weight: bold; color: #856404; }
+        .question-timer.disabled { background: #d4edda; border-color: #28a745; color: #155724; }
     </style>
 </head>
 <body>
     <div class="container">
-        <img src="https://i.postimg.cc/YSYx8fj2/IMG-20260313-WA0035.jpg" alt="Light Of Christ" class="logo">
-        <h1>Light Of Christ</h1>
-        <h2>خدمة اسألني 🕊️</h2>
+        <!-- Logo Image -->
+        <div style="text-align: center;">
+            <img src="https://i.postimg.cc/YSYx8fj2/IMG-20260313-WA0035.jpg" alt="Light Of Christ" class="logo-img">
+        </div>
+        <div class="logo">Light Of Christ</div>
+        <div class="subtitle">اسأل، اقرأ، تنمّى</div>
 
-        <div id="closedMessage">⚠️اخواتنا اللذاذ 🥰🫣حصل ضغط مسدجات👀 الموقع هيوقف حبه لحد م نرد علي المسدجات اللي موجوده بدل م نتأخر عليكم 🫂🤎</div>
+        <!-- Status Bar -->
+        <div class="status-bar">
+            <span>🪙 <b id="userCoins">0</b></span>
+            <span>📚 <b id="userReadings">0</b></span>
+            <span id="serviceStatus">🟢</span>
+        </div>
 
-        <div id="serviceContent">
-            <label style="display:block; text-align:right; font-weight:bold; margin-right:5px;">اختر طريقة الرد:</label>
-            <select id="replyMethod" onchange="toggleFields()">
-                <option value="none">بدون رد (سؤال فقط)</option>
-                <option value="telegram">عبر تليجرام</option>
-                <option value="email">عبر الإيميل</option>
-            </select>
+        <!-- Coins Claim -->
+        <div class="coins-display">
+            <i class="fas fa-coins"></i>
+            <span id="coinsText">0 عملة</span>
+            <button id="claimBtn" class="claim-btn" onclick="claimDailyCoin()">claim</button>
+        </div>
 
-            <div id="telegramField" class="hidden">
-                <div class="helper-grid">
-                    <a href="https://t.me/userinfobot" target="_blank" class="btn-helper"><i class="fas fa-id-badge"></i> 1. اعرف الـ ID</a>
-                    <a href="https://t.me/Essaalny_bot" target="_blank" class="btn-helper"><i class="fab fa-telegram-plane"></i> 2. فعل البوت</a>
+        <!-- Tabs -->
+        <div class="tabs">
+            <button class="tab active" id="tabAsk" onclick="showUserTab('ask')">💬 اسأل</button>
+            <button class="tab" id="tabVerse" onclick="showUserTab('verse')">📖 آية</button>
+            <button class="tab" id="tabReadings" onclick="showUserTab('readings')">📚 قراءاتي</button>
+        </div>
+
+        <!-- Ask Tab -->
+        <div id="askTab">
+            <!-- Normal Ask Content -->
+            <div id="askContent">
+                <div id="questionTimer" class="question-timer hidden">
+                    ⏱️ يمكنك إرسال سؤال جديد
                 </div>
-                <input type="text" id="chatId" placeholder="أدخل معرف تليجرام (ID) هنا">
+                <div class="card">
+                    <div class="input-group">
+                        <label>❓ سؤالك <span class="required">*</span></label>
+                        <textarea id="userQuestion" placeholder="اكتب سؤالك هنا..."></textarea>
+                    </div>
+                    <div class="input-group">
+                        <label>🏷️ التصنيف</label>
+                        <select id="questionCategory">
+                            <option value="الكل">عام</option>
+                            <option value="دراسة">دراسة</option>
+                            <option value="صلاة">صلاة</option>
+                            <option value="نصائح">نصائح</option>
+                            <option value="مشاكل">مشاكل</option>
+                        </select>
+                    </div>
+                    <div class="input-group">
+                        <label>💬 طريقة الرد <span class="optional">(اختياري)</span></label>
+                        <div class="method-selector">
+                            <div class="method-option selected" onclick="selectMethod('noreply', this)">
+                                <i class="fas fa-comment-slash"></i>
+                                <span>بدون رد</span>
+                            </div>
+                            <div class="method-option" onclick="selectMethod('email', this)">
+                                <i class="fas fa-envelope"></i>
+                                <span>بريد</span>
+                            </div>
+                            <div class="method-option" onclick="selectMethod('telegram', this)">
+                                <i class="fab fa-telegram"></i>
+                                <span>Telegram</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="input-group hidden" id="emailField">
+                        <label>📧 البريد الإلكتروني <span class="required">*</span></label>
+                        <input type="email" id="userEmail" placeholder="example@email.com">
+                    </div>
+                    <div class="input-group hidden" id="telegramField">
+                        <label>📱 معرف Telegram <span class="required">*</span></label>
+                        <input type="text" id="userTelegram" placeholder="@username">
+                    </div>
+                    <button class="btn btn-primary" style="width:100%;" onclick="submitQuestion()" id="submitBtn">
+                        <span id="submitText">إرسال السؤال</span>
+                    </button>
+                    <div class="device-info" id="deviceInfo"></div>
+                </div>
             </div>
-
-            <div id="emailField" class="hidden">
-                <input type="email" id="userEmail" placeholder="أدخل بريدك الإلكتروني هنا">
+            <!-- Closed Message (hidden by default) -->
+            <div id="closedMessage" class="hidden">
+                <div class="closed-message">
+                    ⚠️ اخواتنا اللذاذ 🥰🫣<br>
+                    حصل ضغط مسدجات 👀<br>
+                    الموقع هيوقف حبه لحد م نرد علي المسدجات اللي موجوده<br>
+                    بدل م نتأخر عليكم 🫂🤎
+                </div>
             </div>
-
-            <textarea id="question" rows="4" placeholder="اكتب سؤالك هنا بكل حرية..."></textarea>
-            <button id="submitBtn" class="btn-send" onclick="sendQuestion()">إرسال السؤال</button>
         </div>
 
-        <div class="verse-box">
-            <span id="bibleVerse"></span>
-            <button id="verseBtn" class="btn-verse" onclick="getRandomVerse()">📖 اطلب آية تعزية</button>
+        <!-- Verse Tab -->
+        <div id="verseTab" class="hidden">
+            <div class="card">
+                <button class="btn btn-success" style="width:100%; margin-bottom:15px;" onclick="getRandomVerse()" id="verseBtn">
+                    📖 اطلب رسالة سماوية لك
+                </button>
+                <div id="verseDisplay" class="hidden">
+                    <div class="verse-display">
+                        <div id="verseText">...</div>
+                        <div class="ref" id="verseRef"></div>
+                        <button class="share-btn-small" onclick="shareVerse()">📷 مشاركة</button>
+                    </div>
+                </div>
+            </div>
         </div>
 
-        <div class="footer-links">
-            <a href="https://whatsapp.com/channel/0029Vb7Ym8MBlHpjrst9qw01" target="_blank"><i class="fab fa-whatsapp"></i> قناة الأسئلة والأجوبة</a>
-            <a href="https://whatsapp.com/channel/0029Vb7KBfNIt5rqE8Uedn0p" target="_blank"><i class="fab fa-whatsapp"></i> القناة الأساسية</a>
+        <!-- Readings Tab -->
+        <div id="readingsTab" class="hidden">
+            <div class="card">
+                <div style="background: #e3f2fd; padding: 15px; border-radius: 10px; margin-bottom: 15px;">
+                    <h4 style="margin-top:0; color: var(--main-blue);">👤 بياناتك (للسجل)</h4>
+                    <div class="input-group">
+                        <label>الاسم</label>
+                        <input type="text" id="readerName" placeholder="اكتب اسمك">
+                    </div>
+                    <div class="input-group">
+                        <label>العمر</label>
+                        <input type="number" id="readerAge" placeholder="اكتب عمرك" min="5" max="100">
+                    </div>
+                    <div class="input-group">
+                        <label>المحافظة</label>
+                        <select id="readerGovernorate">
+                            <option value="">اختر محافظتك</option>
+                            <option value="القاهرة">القاهرة</option>
+                            <option value="الإسكندرية">الإسكندرية</option>
+                            <option value="الجيزة">الجيزة</option>
+                            <option value="القليوبية">القليوبية</option>
+                            <option value="الشرقية">الشرقية</option>
+                            <option value="الدقهلية">الدقهلية</option>
+                            <option value="البحيرة">البحيرة</option>
+                            <option value="الغربية">الغربية</option>
+                            <option value="المنوفية">المنوفية</option>
+                            <option value="كفر الشيخ">كفر الشيخ</option>
+                            <option value="الفيوم">الفيوم</option>
+                            <option value="بني سويف">بني سويف</option>
+                            <option value="المنيا">المنيا</option>
+                            <option value="أسيوط">أسيوط</option>
+                            <option value="سوهاج">سوهاج</option>
+                            <option value="قنا">قنا</option>
+                            <option value="الأقصر">الأقصر</option>
+                            <option value="أسوان">أسوان</option>
+                            <option value="بورسعيد">بورسعيد</option>
+                            <option value="السويس">السويس</option>
+                            <option value="الإسماعيلية">الإسماعيلية</option>
+                            <option value="شمال سيناء">شمال سيناء</option>
+                            <option value="جنوب سيناء">جنوب سيناء</option>
+                            <option value="البحر الأحمر">البحر الأحمر</option>
+                            <option value="الوادي الجديد">الوادي الجديد</option>
+                            <option value="مطروح">مطروح</option>
+                        </select>
+                    </div>
+                    <button class="btn btn-primary" style="width:100%;" onclick="saveReaderProfile()">💾 حفظ البيانات</button>
+                </div>
+
+                <button class="btn btn-success" style="width:100%; margin-bottom:15px;" onclick="openReadingPopup()">
+                    ➕ إضافة قراءة جديدة
+                </button>
+                <div id="myReadingsList" class="readings-list">
+                    <div style="text-align:center; color:#888; padding:20px;">لا توجد قراءات بعد</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Links Bar -->
+        <div class="links-bar">
+            <a href="https://whatsapp.com/channel/0029Vb7Ym8MBlHpjrst9qw01" target="_blank">
+                <i class="fab fa-whatsapp"></i> قناة الأسئلة والأجوبة
+            </a>
+            <a href="https://whatsapp.com/channel/0029Vb7KBfNIt5rqE8Uedn0p" target="_blank">
+                <i class="fab fa-whatsapp"></i> القناة الأساسية
+            </a>
+        </div>
+    </div>
+
+    <!-- Reading Popup -->
+    <div id="readingPopup" class="reading-popup">
+        <div class="reading-popup-content">
+            <h3 style="margin-top: 0; color: var(--main-blue);">📖 إضافة قراءة</h3>
+            <select id="testamentSelect">
+                <option value="old">العهد القديم</option>
+                <option value="new">العهد الجديد</option>
+            </select>
+            <input type="text" id="bookInput" placeholder="اسم السفر/الاصحاح )">
+            <input type="number" id="chapterInput" placeholder="رقم الأصحاح">
+            <input type="text" id="verseInput" placeholder="اية لمست قلبك 🤍">
+            <div style="display: flex; gap: 10px; margin-top: 15px;">
+                <button class="btn btn-success" style="flex: 1;" onclick="saveUserReading()">حفظ</button>
+                <button class="btn" style="flex: 1; background:#dc3545; color:white;" onclick="closeReadingPopup()">إلغاء</button>
+            </div>
         </div>
     </div>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
-        import { getFirestore, collection, addDoc, serverTimestamp, doc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
+        import { getFirestore, collection, addDoc, serverTimestamp, getDocs, query, where, orderBy, limit, doc, getDoc, setDoc, updateDoc, onSnapshot, deleteDoc } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyDHODkkq-DF_u1KFPhd-K-Ya1yhGDcS2WE",
@@ -88,113 +278,16 @@
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
 
-        onSnapshot(doc(db, "settings", "service_status"), (doc) => {
-            if (doc.exists()) {
-                const isClosed = doc.data().closed;
-                document.getElementById('serviceContent').style.display = isClosed ? 'none' : 'block';
-                document.getElementById('closedMessage').style.display = isClosed ? 'block' : 'none';
-            }
-        });
+        const COIN_COOLDOWN = 24 * 60 * 60 * 1000; // 24 hours in ms
+        const VERSE_COOLDOWN = 2 * 60 * 60 * 1000; // 2 hours in ms
+        const QUESTION_COOLDOWN = 5 * 60 * 60 * 1000; // 5 hours in ms
+        let userId = localStorage.getItem('userId') || generateUserId();
+        let userIP = 'unknown';
+        let selectedMethod = 'noreply';
+        let serviceClosed = false;
+        let questionTimerEnabled = true;
 
-        window.toggleFields = () => {
-            const method = document.getElementById('replyMethod').value;
-            document.getElementById('telegramField').classList.toggle('hidden', method !== 'telegram');
-            document.getElementById('emailField').classList.toggle('hidden', method !== 'email');
-        };
-
-        window.sendQuestion = async () => {
-            const btn = document.getElementById('submitBtn');
-            const lastSent = localStorage.getItem("lastSentTime");
-            const now = new Date().getTime();
-            
-            if (lastSent && (now - lastSent < 5 * 60 * 60 * 1000)) {
-                alert("مسموح بسؤال كل 5 ساعات.");
-                return;
-            }
-
-            const qText = document.getElementById('question').value.trim();
-            if (!qText) { alert("اكتب سؤالك!"); return; }
-
-            btn.disabled = true;
-            btn.innerText = "جاري الإرسال...";
-
-            try {
-                await addDoc(collection(db, "questions"), {
-                    question: qText,
-                    replyMethod: document.getElementById('replyMethod').value,
-                    chatId: document.getElementById('chatId').value || "none",
-                    userEmail: document.getElementById('userEmail').value || "none",
-                    timestamp: serverTimestamp()
-                });
-                
-                await fetch(`https://api.telegram.org/bot8326561499:AAF8y3t3Z9v2E2ryLF0gsP_gvRkZNENkmoU/sendMessage?chat_id=1797024289&text=${encodeURIComponent("🔔 سؤال جديد!\n" + qText)}`);
-
-                localStorage.setItem("lastSentTime", now);
-                alert("تم الإرسال بنجاح!");
-                location.reload();
-            } catch (e) { 
-                alert("خطأ في الإرسال."); 
-                btn.disabled = false;
-                btn.innerText = "إرسال السؤال";
-            }
-        };
-
-        // --- نظام الـ 100 آية بالشواهد ---
         const verses = [
-            "لاَ تَخَفْ، لأَنِّي مَعَكَ. لاَ تَتَلَفَّتْ، لأَنِّي إِلهُكَ. قَدْ أَيَّدْتُكَ وَأَعَنْتُكَ (إشعياء 41: 10)",
-            "الرَّبُّ رَاعِيَّ فَلاَ يُعْوزُنِي شَيْءٌ (مزمور 23: 1)",
-            "أَسْتَطِيعُ كُلَّ شَيْءٍ فِي الْمَسِيحِ الَّذِي يُقَوِّينِي (فيلبي 4: 13)",
-            "تَعَالَوْا إِلَيَّ يَا جَمِيعَ الْمُتْعِبِينَ وَالثَّقِيلِي الأحْمَالِ، وَأَنَا أُرِيحُكُمْ (متى 11: 28)",
-            "إِنْ كَانَ اللهُ مَعَنَا، فَمَنْ عَلَيْنَا؟ (رومية 8: 31)",
-            "مُلْقِينَ كُلَّ هَمِّكُمْ عَلَيْهِ، لأَنَّهُ هُوَ يَعْتَنِي بِكُمْ (1 بطرس 5: 7)",
-            "الرَّبُّ نُورِي وَخَلاَصِي، مِمَّنْ أَخَافُ؟ (مزمور 27: 1)",
-            "لاَ يَقِفُ إِنْسَانٌ فِي وَجْهِكَ كُلَّ أَيَّامِ حَيَاتِكَ. كَمَا كُنْتُ مَعَ مُوسَى أَكُونُ مَعَكَ (يشوع 1: 5)",
-            "سَلاَمًا أَتْرُكُ لَكُمْ. سَلاَمِي أُعْطِيكُمْ (يوحنا 14: 27)",
-            "اَللهُ مَحَبَّةٌ، وَمَنْ يَثْبُتْ فِي الْمَحَبَّةِ، يَثْبُتْ فِي اللهِ (1 يوحنا 4: 16)",
-            "فِي الْعَالَمِ سَيَكُونُ لَكُمْ ضِيقٌ، وَلكِنْ ثِقُوا: أَنَا قَدْ غَلَبْتُ الْعَالَمَ (يوحنا 16: 33)",
-            "الرَّبُّ يُقَاتِلُ عَنْكُمْ وَأَنْتُمْ تَصْمُتُونَ (خروج 14: 14)",
-            "قَدْ نَقَشْتُكَ عَلَى كَفَّيَّ. أَسْوَارُكَ أَمَامِي دَائِمًا (إشعياء 49: 16)",
-            "لاَ تَخَفْ لأَنِّي فَدَيْتُكَ. دَعَوْتُكَ بِاسْمِكَ. أَنْتَ لِي (إشعياء 43: 1)",
-            "أَمِينٌ هُوَ اللهُ الَّذِي لَنْ يَدَعَكُمْ تُجَرَّبُونَ فَوْقَ مَا تَسْتَطِيعُونَ (1 كورنثوس 10: 13)",
-            "الرَّبُّ صَالِحٌ، حِصْنٌ فِي يَوْمِ الضِّيقِ (ناحوم 1: 7)",
-            "تَوَكَّلْ عَلَى الرَّبِّ بِكُلِّ قَلْبِكَ، وَعَلَى فَهْمِكَ لاَ تَعْتَمِدْ (أمثال 3: 5)",
-            "يَشْفِي الْمُنْكَسِرِي الْقُلُوبِ، وَيَجْبُرُ كَسْرَهُمْ (مزمور 147: 3)",
-            "قَلْبُ الإِنْسَانِ يُفَكِّرُ فِي طَرِيقِهِ، وَالرَّبُّ يُهَدِّي خَطْوَتَهُ (أمثال 16: 9)",
-            "إِنْ كَانَ أَحَدٌ فِي الْمَسِيحِ فَهُوة خَلِيقَةٌ جَدِيدَةٌ (2 كورنثوس 5: 17)",
-            "يُعْطِي الْمُعْيِيَ قُدْرَةً، وَلِعَدِيمِ الْقُوَّةِ يُكَثِّرُ شِدَّةً (إشعياء 40: 29)",
-            "أَمَّا مُنْتَظِرُو الرَّبِّ فَيُجَدِّدُونَ قُوَّةً (إشعياء 40: 31)",
-            "الرَّبُّ قَرِيبٌ لِكُلِّ الَّذِينَ يَدْعُونَهُ (مزمور 145: 18)",
-            "اِفْرَحُوا فِي الرَّبِّ كُلَّ حِينٍ (فيلبي 4: 4)",
-            "اَلرَّبُّ نَاصِرِي فَلاَ أَخَافُ. مَاذَا يَصْنَعُ بِي إِنْسَانٌ؟ (عبرانيين 13: 6)",
-            "كُلُّ مَنْ يَدْعُو بِاسْمِ الرَّبِّ يَخْلُصُ (رومية 10: 13)",
-            "فِي ظِلِّ جَنَاحَيْكَ أَحْتَمِي إِلَى أَنْ تَعْبُرَ الْمَصَائِبُ (مزمور 57: 1)",
-            "بِالْهُدُوءِ وَالطُّمَأْنِينَةِ تَكُونُ قُوَّتُكُمْ (إشعياء 30: 15)",
-            "يَحْفَظُكَ الرَّبُّ مِنْ كُلِّ سُوءٍ. يَحْفَظُ نَفْسَكَ (مزمور 121: 7)",
-            "لاَ تَنْسَ كُلَّ حَسَنَاتِهِ. الَّذِي يَغْفِرُ جَمِيعَ ذُنُوبِكَ (مزمور 103: 2-3)",
-            "الرَّبُّ رَحِيمٌ وَرَؤُوفٌ، طَوِيلُ الرُّوحِ وَكَثِيرُ الرَّحْمَةِ (مزمور 103: 8)",
-            "فِي يَوْمِ ضِيقِي أَدْعُوكَ، لأَنَّكَ تَسْتَجِيبُ لِي (مزمور 86: 7)",
-            "لأَنَّ مَرَاحِمَهُ لاَ تَزُولُ، هِيَ جَدِيدَةٌ فِي كُلِّ صَبَاحٍ (مراثي 3: 22-23)",
-            "قَلْبًا نَقِيًّا اخْلُقْ فِيَّ يَا اللهُ (مزمور 51: 10)",
-            "مُبَارَكٌ الرَّجلُ الَّذِي يَتَّكِلُ عَلَى الرَّبِّ (إرميا 17: 7)",
-            "أَنَا الرَّبُّ لاَ أَتَغَيَّرُ (ملاخي 3: 6)",
-            "الَّذِي يَأْتِي إِلَيَّ لاَ أُخْرِجُهُ خَارِجًا (يوحنا 6: 37)",
-            "خِرَافِي تَسْمَعُ صَوْتِي، وَأَنَا أَعْرِفُهَا فَتَتْبَعُنِي (يوحنا 10: 27)",
-            "الرَّبُّ قُوَّتِي وَتُرْسِي. عَلَيْهِ اتَّكَلَ قَلْبِي، فَنُصِرْتُ (مزمور 28: 7)",
-            "كُلُّ آلَةٍ صُوِّرَتْ ضِدَّكِ لاَ تَنْجَحُ (إشعياء 54: 17)",
-            "بِالْمَحَبَّةِ الأبَدِيَّةِ أَحْبَبْتُكَ (إرميا 31: 3)",
-            "لاَ تَهْتَمُّوا لِلْغَدِ، لأَنَّ الْغَدَ يَهْتَمُّ بِمَا لِنَفْسِهِ (متى 6: 34)",
-            "مَنْ يَمَسُّكُمْ يَمَسُّ حَدَقَةَ عَيْنِهِ (زكريا 2: 8)",
-            "لأَنَّ أَبِي وَأُمِّي قَدْ تَرَكَانِي وَالرَّبُّ يَقْبَلُنِي (مزمور 27: 10)",
-            "إِنْ سَلَكْتُ فِي وَسَطِ الضِّيقِ تُحْيِينِي (مزمور 138: 7)",
-            "أَنْتَ سِتْرٌ لِي. مِنَ الضِّيقِ تَحْفَظُنِي (مزمور 32: 7)",
-            "اذْكُرْ لِيَ الْقَوْلَ الَّذِي جَعَلْتَنِي أَنْتَظِرُهُ (مزمور 119: 49)",
-            "اللهُ لَمْ يُعْطِنَا رُوحَ الْفَشَلِ، بَلْ رُوحَ الْقُوَّةِ (2 تيموثاوس 1: 7)",
-            "كَثِيرَةٌ هِيَ بَلاَيَا الصِّدِّيقِ، وَمِنْ جَمِيعِهَا يُنَجِّيهِ الرَّبُّ (مزمور 34: 19)",
-            "اَلرَّبُّ قَرِيبٌ مِنَ الْمُنْكَسِرِي الْقُلُوبِ (مزمور 34: 18)",
-            "أَنَا هُوَ الطَّرِيقُ وَالْحَقُّ وَالْحَيَاةُ (يوحنا 14: 6)",
-            "إِنْ سَلَكْتُ فِي وَادِي ظِلِّ الْمَوْتِ لاَ أَخَافُ شَرًّا (مزمور 23: 4)",
-            "يُرِيحُكَ الرَّبُّ مِنْ تَعَبِكَ وَمِنِ انْزِعَاجِكَ (إشعياء 14: 3)",
-            "لاَ يَنْعَسُ وَلاَ يَنَامُ حَافِظُكَ (مزمور 121: 4)",
             "أَنَا مَعَكُمْ كُلَّ الأيَّامِ إِلَى انْقِضَاءِ الدَّهْرِ (متى 28: 20)",
             "عَرَفْتُ أَنَّكَ تَسْتَطِيعُ كُلَّ شَيْءٍ (أيوب 42: 2)",
             "سِراجٌ لِرِجْلِي كَلاَمُكَ وَنُورٌ لِسَبِيلِي (مزمور 119: 105)",
@@ -243,18 +336,274 @@
             "إِلَيْكَ يُفَوِّضُ الْمِسْكِينُ أَمْرَهُ. أَنْتَ صِرْتَ مُعِينَ الْيَتِيمِ (مزمور 10: 14)"
         ];
 
+        function generateUserId() {
+            const id = 'user_' + Math.random().toString(36).substr(2, 9) + '_' + Date.now();
+            localStorage.setItem('userId', id);
+            return id;
+        }
+
+        async function initUser() {
+            try {
+                const res = await fetch('https://api.ipify.org?format=json');
+                const data = await res.json();
+                userIP = data.ip;
+            } catch(e) {}
+
+            const deviceInfo = navigator.userAgent;
+            document.getElementById('deviceInfo').innerText = '📱 ' + deviceInfo.substring(0, 50) + '...';
+
+            const savedName = localStorage.getItem('readerName');
+            const savedAge = localStorage.getItem('readerAge');
+            const savedGov = localStorage.getItem('readerGovernorate');
+            if (savedName) document.getElementById('readerName').value = savedName;
+            if (savedAge) document.getElementById('readerAge').value = savedAge;
+            if (savedGov) document.getElementById('readerGovernorate').value = savedGov;
+
+            const userRef = doc(db, "users", userId);
+            const userSnap = await getDoc(userRef);
+
+            if (!userSnap.exists()) {
+                await setDoc(userRef, {
+                    userId: userId,
+                    age: null,
+                    governorate: null,
+                    coins: 0,
+                    deviceInfo: deviceInfo,
+                    ip: userIP,
+                    readingCount: 0,
+                    lastCoinClaim: null,
+                    createdAt: serverTimestamp()
+                });
+            } else {
+                await updateDoc(userRef, { ip: userIP, deviceInfo: deviceInfo });
+            }
+
+            loadUserData();
+
+            onSnapshot(doc(db, "settings", "service_status"), d => {
+                serviceClosed = d.exists() && d.data().closed;
+                document.getElementById('serviceStatus').innerText = serviceClosed ? '🔴 مغلق' : '🟢 مفتوح';
+
+                if (serviceClosed) {
+                    document.getElementById('askContent').classList.add('hidden');
+                    document.getElementById('closedMessage').classList.remove('hidden');
+                    document.getElementById('tabAsk').disabled = true;
+                    document.getElementById('tabAsk').style.opacity = '0.5';
+                } else {
+                    document.getElementById('askContent').classList.remove('hidden');
+                    document.getElementById('closedMessage').classList.add('hidden');
+                    document.getElementById('tabAsk').disabled = false;
+                    document.getElementById('tabAsk').style.opacity = '1';
+                }
+            });
+
+            // Listen to question timer status
+            onSnapshot(doc(db, "settings", "question_timer"), d => {
+                questionTimerEnabled = d.exists() ? d.data().enabled : true;
+                updateQuestionTimerUI();
+            });
+
+            onSnapshot(doc(db, "users", userId), d => {
+                if (d.exists()) {
+                    const data = d.data();
+                    document.getElementById('userCoins').innerText = data.coins || 0;
+                    document.getElementById('userReadings').innerText = data.readingCount || 0;
+                    document.getElementById('coinsText').innerText = (data.coins || 0) + ' عملة';
+                    updateClaimButton(data.lastCoinClaim);
+                }
+            });
+        }
+
+        async function loadUserData() {
+            const userRef = doc(db, "users", userId);
+            const userSnap = await getDoc(userRef);
+            if (userSnap.exists()) {
+                const data = userSnap.data();
+                document.getElementById('userCoins').innerText = data.coins || 0;
+                document.getElementById('userReadings').innerText = data.readingCount || 0;
+                document.getElementById('coinsText').innerText = (data.coins || 0) + ' عملة';
+                updateClaimButton(data.lastCoinClaim);
+            }
+        }
+
+        function updateClaimButton(lastClaim) {
+            const btn = document.getElementById('claimBtn');
+            if (!lastClaim) {
+                btn.disabled = false;
+                btn.innerText = '💰 Claim عملة';
+                return;
+            }
+            const lastClaimTime = lastClaim.toDate ? lastClaim.toDate().getTime() : new Date(lastClaim).getTime();
+            const now = Date.now();
+            const diff = now - lastClaimTime;
+
+            if (diff >= COIN_COOLDOWN) {
+                btn.disabled = false;
+                btn.innerText = '💰 Claim عملة';
+            } else {
+                btn.disabled = true;
+                const remaining = COIN_COOLDOWN - diff;
+                const hours = Math.floor(remaining / (1000 * 60 * 60));
+                const minutes = Math.floor((remaining % (1000 * 60 * 60)) / (1000 * 60));
+                btn.innerText = `⏱️ ${hours}h ${minutes}m`;
+            }
+        }
+
+        function updateQuestionTimerUI() {
+            const timerDiv = document.getElementById('questionTimer');
+            const btn = document.getElementById('submitBtn');
+
+            if (!questionTimerEnabled) {
+                timerDiv.className = 'question-timer disabled';
+                timerDiv.innerText = '✅ يمكنك الإرسال بدون انتظار';
+                timerDiv.classList.remove('hidden');
+                btn.disabled = false;
+                return;
+            }
+
+            const lastQuestionTime = localStorage.getItem('lastQuestionTime');
+            if (!lastQuestionTime) {
+                timerDiv.className = 'question-timer hidden';
+                btn.disabled = false;
+                return;
+            }
+
+            const lastTime = parseInt(lastQuestionTime);
+            const now = Date.now();
+            const diff = now - lastTime;
+
+            if (diff >= QUESTION_COOLDOWN) {
+                timerDiv.className = 'question-timer hidden';
+                btn.disabled = false;
+            } else {
+                timerDiv.className = 'question-timer';
+                const remaining = QUESTION_COOLDOWN - diff;
+                const hours = Math.floor(remaining / (1000 * 60 * 60));
+                const minutes = Math.floor((remaining % (1000 * 60 * 60)) / (1000 * 60));
+                const seconds = Math.floor((remaining % (1000 * 60)) / 1000);
+                timerDiv.innerText = `⏱️ انتظر: ${hours}س ${minutes}د ${seconds}ث قبل إرسال سؤال جديد`;
+                timerDiv.classList.remove('hidden');
+                btn.disabled = true;
+
+                setTimeout(updateQuestionTimerUI, 1000);
+            }
+        }
+
+        window.saveReaderProfile = () => {
+            const name = document.getElementById('readerName').value.trim();
+            const age = document.getElementById('readerAge').value.trim();
+            const gov = document.getElementById('readerGovernorate').value;
+
+            if (name) localStorage.setItem('readerName', name);
+            if (age) localStorage.setItem('readerAge', age);
+            if (gov) localStorage.setItem('readerGovernorate', gov);
+
+            alert('✅ تم حفظ بياناتك');
+        };
+
+        window.selectMethod = (method, el) => {
+            selectedMethod = method;
+            document.querySelectorAll('.method-option').forEach(o => o.classList.remove('selected'));
+            el.classList.add('selected');
+
+            document.getElementById('emailField').classList.toggle('hidden', method !== 'email');
+            document.getElementById('telegramField').classList.toggle('hidden', method !== 'telegram');
+        };
+
+        window.showUserTab = (tab) => {
+            if (tab === 'ask' && serviceClosed) return;
+
+            document.getElementById('askTab').classList.toggle('hidden', tab !== 'ask');
+            document.getElementById('verseTab').classList.toggle('hidden', tab !== 'verse');
+            document.getElementById('readingsTab').classList.toggle('hidden', tab !== 'readings');
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            event.target.classList.add('active');
+            if (tab === 'readings') loadMyReadings();
+        };
+
+        window.submitQuestion = async () => {
+            if (serviceClosed) {
+                alert("⛔ الخدمة مغلقة حالياً");
+                return;
+            }
+
+            const question = document.getElementById('userQuestion').value.trim();
+            const category = document.getElementById('questionCategory').value;
+
+            if (!question) {
+                alert("الرجاء كتابة السؤال");
+                return;
+            }
+
+            // Check question timer
+            if (questionTimerEnabled) {
+                const lastQuestionTime = localStorage.getItem('lastQuestionTime');
+                if (lastQuestionTime) {
+                    const lastTime = parseInt(lastQuestionTime);
+                    const now = Date.now();
+                    if (now - lastTime < QUESTION_COOLDOWN) {
+                        const remainingHours = Math.floor((QUESTION_COOLDOWN - (now - lastTime)) / (60 * 60 * 1000));
+                        const remainingMinutes = Math.floor(((QUESTION_COOLDOWN - (now - lastTime)) % (60 * 60 * 1000)) / (60 * 1000));
+                        alert(`⏱️ يجب الانتظار 5 ساعات بين كل سؤال والتاني (باقي: ${remainingHours} ساعة و ${remainingMinutes} دقيقة)`);
+                        return;
+                    }
+                }
+            }
+
+            let email = '', telegram = '';
+            if (selectedMethod === 'email') {
+                email = document.getElementById('userEmail').value.trim();
+                if (!email) { alert("الرجاء كتابة البريد الإلكتروني"); return; }
+            } else if (selectedMethod === 'telegram') {
+                telegram = document.getElementById('userTelegram').value.trim();
+                if (!telegram) { alert("الرجاء كتابة معرف Telegram"); return; }
+            }
+
+            const btn = document.getElementById('submitBtn');
+            btn.disabled = true;
+            document.getElementById('submitText').innerText = '⏳ جاري الإرسال...';
+
+            try {
+                await addDoc(collection(db, "questions"), {
+                    userId: userId,
+                    question: question,
+                    category: category,
+                    replyMethod: selectedMethod,
+                    userEmail: email,
+                    chatId: telegram,
+                    ip: userIP,
+                    timestamp: serverTimestamp()
+                });
+
+                // Save question time for timer
+                localStorage.setItem('lastQuestionTime', Date.now().toString());
+                updateQuestionTimerUI();
+
+                document.getElementById('userQuestion').value = '';
+                document.getElementById('submitText').innerText = '✅ تم الإرسال!';
+                setTimeout(() => {
+                    document.getElementById('submitText').innerText = 'إرسال السؤال';
+                    btn.disabled = false;
+                }, 2000);
+            } catch(e) {
+                console.error(e);
+                alert("حدث خطأ أثناء الإرسال");
+                document.getElementById('submitText').innerText = 'إرسال السؤال';
+                btn.disabled = false;
+            }
+        };
+
         window.getRandomVerse = () => {
-            const textElement = document.getElementById('bibleVerse');
+            const textElement = document.getElementById('verseText');
             const btn = document.getElementById('verseBtn');
             const lastTime = localStorage.getItem("lastVerseTime");
             const now = new Date().getTime();
-            const fiveHours = 5 * 60 * 60 * 1000;
 
-            if (lastTime && (now - lastTime < fiveHours)) {
-                const remainingHours = Math.floor((fiveHours - (now - lastTime)) / (60 * 60 * 1000));
-                const remainingMinutes = Math.floor(((fiveHours - (now - lastTime)) % (60 * 60 * 1000)) / (60 * 1000));
-                
-                alert(`شوفتك يا بكاش و انت عايز آيه تاني 👀😉 بس للاسف الموقع مش هيكتبلك آيه جديده غير بعد خمس ساعات🫣 (باقي: ${remainingHours} ساعة و ${remainingMinutes} دقيقة) يلا بقا روح فكر ف رساله ربنا ليك و قوله انت عايز تقولي اي يا رب 🏃🏻🙏🏻🤎✨`);
+            if (lastTime && (now - lastTime < VERSE_COOLDOWN)) {
+                const remainingHours = Math.floor((VERSE_COOLDOWN - (now - lastTime)) / (60 * 60 * 1000));
+                const remainingMinutes = Math.floor(((VERSE_COOLDOWN - (now - lastTime)) % (60 * 60 * 1000)) / (60 * 1000));
+
+                alert(`شوفتك يا بكاش و انت عايز آيه تاني 👀😉 بس للاسف الموقع مش هيكتبلك آيه جديده غير بعد ساعتين🫣 (باقي: ${remainingHours} ساعة و ${remainingMinutes} دقيقة) يلا بقا روح فكر ف رساله ربنا ليك و قوله انت عايز تقولي اي يا رب 🏃🏻🙏🏻🤎✨`);
                 return;
             }
 
@@ -263,6 +612,8 @@
             textElement.style.display = 'block';
             textElement.style.opacity = 0;
 
+            document.getElementById('verseDisplay').classList.remove('hidden');
+
             setTimeout(() => {
                 textElement.style.opacity = 1;
                 localStorage.setItem("lastVerseTime", now);
@@ -270,9 +621,182 @@
                 btn.disabled = true;
             }, 100);
         };
+
+        window.shareVerse = async () => {
+            const verseText = document.getElementById('verseText').innerText;
+
+            const div = document.createElement('div');
+            div.style.cssText = "padding:40px; background:linear-gradient(135deg, #667eea, #764ba2); width:350px; text-align:center; position:absolute; left:-9999px; z-index:-1;";
+            div.innerHTML = `
+                <div style="background:white; padding:30px; border-radius:20px; box-shadow:0 10px 20px rgba(0,0,0,0.2); direction:rtl;">
+                    <p style="font-size:18px; color:#333; line-height:1.8; margin-bottom:15px;">${verseText}</p>
+                    <p style="color:#aaa; font-size:12px; margin-top:15px;">Light of Christ</p>
+                </div>`;
+            document.body.appendChild(div);
+
+            try {
+                const canvas = await html2canvas(div, { backgroundColor: null });
+                canvas.toBlob(async (blob) => {
+                    const file = new File([blob], "verse.png", { type: "image/png" });
+                    if (navigator.canShare && navigator.canShare({ files: [file] })) {
+                        try { await navigator.share({ files: [file], title: 'آية', text: verseText }); } catch(err) {}
+                    } else {
+                        const link = document.createElement('a');
+                        link.download = "verse.png";
+                        link.href = canvas.toDataURL("image/png");
+                        link.click();
+                    }
+                    document.body.removeChild(div);
+                }, "image/png");
+            } catch (error) {
+                alert("حدث خطأ أثناء إنشاء الصورة");
+                document.body.removeChild(div);
+            }
+        };
+
+        window.claimDailyCoin = async () => {
+            const userRef = doc(db, "users", userId);
+            const userSnap = await getDoc(userRef);
+            if (!userSnap.exists()) return;
+
+            const data = userSnap.data();
+            const lastClaim = data.lastCoinClaim;
+
+            if (lastClaim) {
+                const lastClaimTime = lastClaim.toDate ? lastClaim.toDate().getTime() : new Date(lastClaim).getTime();
+                const now = Date.now();
+                if (now - lastClaimTime < COIN_COOLDOWN) {
+                    alert("⏱️ يمكنك Claim عملة واحدة فقط كل 24 ساعة");
+                    return;
+                }
+            }
+
+            try {
+                const newCoins = (data.coins || 0) + 1;
+                await updateDoc(userRef, { coins: newCoins, lastCoinClaim: serverTimestamp() });
+                alert(`🎉 تم إضافة عملة! رصيدك الآن: ${newCoins}`);
+            } catch(e) { alert("حدث خطأ"); }
+        };
+
+        window.openReadingPopup = () => {
+            document.getElementById('readingPopup').style.display = 'flex';
+        };
+
+        window.closeReadingPopup = () => {
+            document.getElementById('readingPopup').style.display = 'none';
+            document.getElementById('bookInput').value = '';
+            document.getElementById('chapterInput').value = '';
+            document.getElementById('verseInput').value = '';
+        };
+
+        window.saveUserReading = async () => {
+            const testament = document.getElementById('testamentSelect').value;
+            const book = document.getElementById('bookInput').value.trim();
+            const chapter = document.getElementById('chapterInput').value.trim();
+            const verse = document.getElementById('verseInput').value.trim();
+
+            if (!book || !chapter || !verse) {
+                alert("الرجاء ملء جميع الحقول");
+                return;
+            }
+
+            const readerName = document.getElementById('readerName').value.trim() || 'مستخدم';
+            const readerAge = document.getElementById('readerAge').value.trim() || null;
+            const readerGov = document.getElementById('readerGovernorate').value || null;
+
+            try {
+                await addDoc(collection(db, "readings"), {
+                    testament, book, chapter, verse,
+                    userId: userId,
+                    userName: readerName,
+                    age: readerAge ? parseInt(readerAge) : null,
+                    governorate: readerGov,
+                    timestamp: serverTimestamp()
+                });
+
+                const userRef = doc(db, "users", userId);
+                const userSnap = await getDoc(userRef);
+                if (userSnap.exists()) {
+                    const currentCount = userSnap.data().readingCount || 0;
+                    await updateDoc(userRef, {
+                        readingCount: currentCount + 1,
+                        age: readerAge ? parseInt(readerAge) : userSnap.data().age,
+                        governorate: readerGov || userSnap.data().governorate,
+                        lastActive: serverTimestamp()
+                    });
+                }
+
+                closeReadingPopup();
+                loadMyReadings();
+                alert("✅ تم حفظ القراءة بنجاح");
+            } catch(e) {
+                console.error(e);
+                alert("حدث خطأ أثناء الحفظ");
+            }
+        };
+
+        async function loadMyReadings() {
+            const list = document.getElementById('myReadingsList');
+            list.innerHTML = '<div style="text-align:center; padding:20px;"><div class="loading"></div></div>';
+
+            try {
+                const q = query(
+                    collection(db, "readings"), 
+                    where("userId", "==", userId),
+                    limit(50)
+                );
+                const snap = await getDocs(q);
+
+                if (snap.empty) {
+                    list.innerHTML = '<div style="text-align:center; color:#888; padding:20px;">لا توجد قراءات بعد</div>';
+                    return;
+                }
+
+                const readings = [];
+                snap.forEach(d => readings.push({ id: d.id, data: d.data() }));
+                readings.sort((a, b) => {
+                    const tA = a.data.timestamp?.toDate?.() || new Date(0);
+                    const tB = b.data.timestamp?.toDate?.() || new Date(0);
+                    return tB - tA;
+                });
+
+                list.innerHTML = '';
+                readings.forEach(({ data }) => {
+                    const timeStr = data.timestamp?.toDate?.().toLocaleString('ar-EG') || '';
+                    list.innerHTML += `
+                        <div class="reading-card" id="ur-${d.id}">
+                            <div style="display:flex; justify-content:space-between; align-items:center;">
+                                <div class="book-name">📖 ${data.book} - ${data.testament === 'old' ? 'العهد القديم' : 'العهد الجديد'}</div>
+                                <button onclick="deleteReading('${d.id}')" style="background:#dc3545; color:white; border:none; padding:4px 10px; border-radius:6px; cursor:pointer; font-size:12px;">🗑️ حذف</button>
+                            </div>
+                            <div style="font-size:13px; color:#666; margin-top:5px;">
+                                أصحاح ${data.chapter} | آية ${data.verse}
+                            </div>
+                            <div style="font-size:11px; color:#999; margin-top:5px;">${timeStr}</div>
+                        </div>
+                    `;
+                });
+            } catch(e) {
+                console.error(e);
+                list.innerHTML = '<div style="text-align:center; color:#888; padding:20px;">خطأ في تحميل القراءات</div>';
+            }
+        }
+
+        window.deleteReading = async (readingId) => {
+            if (!confirm("حذف القراءة نهائياً؟")) return;
+            try {
+                await deleteDoc(doc(db, "readings", readingId));
+                const el = document.getElementById(`ur-${readingId}`);
+                if (el) el.remove();
+                alert("✅ تم حذف القراءة");
+            } catch(e) {
+                alert("حدث خطأ أثناء الحذف");
+            }
+        };
+
+        initUser();
     </script>
 
     <script src="https://pl28959264.profitablecpmratenetwork.com/23/02/64/2302640f329b36c1ef481b12ab1765a6.js"></script>
-
 </body>
 </html>
