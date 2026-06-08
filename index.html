@@ -252,7 +252,7 @@
                 <option value="old">العهد القديم</option>
                 <option value="new">العهد الجديد</option>
             </select>
-            <input type="text" id="bookInput" placeholder="اسم السفر/الاصحاح )">
+            <input type="text" id="bookInput" placeholder=" السفر /الاصحاح">
             <input type="number" id="chapterInput" placeholder="رقم الأصحاح">
             <input type="text" id="verseInput" placeholder="اية لمست قلبك 🤍">
             <div style="display: flex; gap: 10px; margin-top: 15px;">
@@ -761,13 +761,14 @@
                 });
 
                 list.innerHTML = '';
-                readings.forEach(({ data }) => {
+                readings.forEach((item) => {
+                    const data = item.data;
                     const timeStr = data.timestamp?.toDate?.().toLocaleString('ar-EG') || '';
                     list.innerHTML += `
-                        <div class="reading-card" id="ur-${d.id}">
+                        <div class="reading-card" id="ur-${item.id}">
                             <div style="display:flex; justify-content:space-between; align-items:center;">
                                 <div class="book-name">📖 ${data.book} - ${data.testament === 'old' ? 'العهد القديم' : 'العهد الجديد'}</div>
-                                <button onclick="deleteReading('${d.id}')" style="background:#dc3545; color:white; border:none; padding:4px 10px; border-radius:6px; cursor:pointer; font-size:12px;">🗑️ حذف</button>
+                                <button onclick="deleteReading('${item.id}')" style="background:#dc3545; color:white; border:none; padding:4px 10px; border-radius:6px; cursor:pointer; font-size:12px;">🗑️ حذف</button>
                             </div>
                             <div style="font-size:13px; color:#666; margin-top:5px;">
                                 أصحاح ${data.chapter} | آية ${data.verse}
