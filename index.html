@@ -257,7 +257,7 @@
             <input type="text" id="bookInput" placeholder=" السفر /الاصحاح">
             <input type="number" id="chapterInput" placeholder="رقم الأصحاح">
             <input type="text" id="verseInput" placeholder="اية لمست قلبك 🤍">
-            <input type="text" id="quizAnswerInput" placeholder="اجابة الكويز" maxlength="50">
+            <input type="text" id="quizAnswerInput" placeholder="اجابة الكويز (جملة من 50 حرف)" maxlength="50">
             <div style="display: flex; gap: 10px; margin-top: 15px;">
                 <button class="btn btn-success" style="flex: 1;" onclick="saveUserReading()">حفظ</button>
                 <button class="btn" style="flex: 1; background:#dc3545; color:white;" onclick="closeReadingPopup()">إلغاء</button>
@@ -412,7 +412,7 @@
                     document.getElementById('userCoins').innerText = data.coins || 0;
                     document.getElementById('userReadings').innerText = data.readingCount || 0;
                     document.getElementById('coinsText').innerText = (data.coins || 0) + ' عملة';
-                    updateClaimButton(data.lastCoinClaim);
+                    updateClaimButton(data.lastCoinClaim, data.coins || 0, data.readingCount || 0);
                 }
             });
         }
@@ -425,12 +425,21 @@
                 document.getElementById('userCoins').innerText = data.coins || 0;
                 document.getElementById('userReadings').innerText = data.readingCount || 0;
                 document.getElementById('coinsText').innerText = (data.coins || 0) + ' عملة';
-                updateClaimButton(data.lastCoinClaim);
+                updateClaimButton(data.lastCoinClaim, data.coins || 0, data.readingCount || 0);
             }
         }
 
-        function updateClaimButton(lastClaim) {
+        function updateClaimButton(lastClaim, currentCoins, currentReadings) {
             const btn = document.getElementById('claimBtn');
+
+            // Check coin limit first
+            if (currentCoins >= currentReadings) {
+                btn.disabled = true;
+                btn.innerText = '⛈️ أضف قراءة أولاً';
+                btn.title = 'رصيدك يساوي عدد قراءاتك';
+                return;
+            }
+
             if (!lastClaim) {
                 btn.disabled = false;
                 btn.innerText = '💰 Claim عملة';
@@ -664,6 +673,14 @@
 
             const data = userSnap.data();
             const lastClaim = data.lastCoinClaim;
+            const currentCoins = data.coins || 0;
+            const currentReadings = data.readingCount || 0;
+
+            // Coin limit: cannot have more coins than readings
+            if (currentCoins >= currentReadings) {
+                alert(`⛔ لا يمكنك Claim عملة جديدة!\nرصيدك (${currentCoins}) يساوي عدد قراءاتك (${currentReadings}).\nأضف قراءة جديدة أولاً.`);
+                return;
+            }
 
             if (lastClaim) {
                 const lastClaimTime = lastClaim.toDate ? lastClaim.toDate().getTime() : new Date(lastClaim).getTime();
@@ -675,7 +692,7 @@
             }
 
             try {
-                const newCoins = (data.coins || 0) + 1;
+                const newCoins = currentCoins + 1;
                 await updateDoc(userRef, { coins: newCoins, lastCoinClaim: serverTimestamp() });
                 alert(`🎉 تم إضافة عملة! رصيدك الآن: ${newCoins}`);
             } catch(e) { alert("حدث خطأ"); }
@@ -710,6 +727,7 @@
 
             try {
                 const quizAnswer = document.getElementById('quizAnswerInput').value.trim();
+
             await addDoc(collection(db, "readings"), {
                     testament, book, chapter, verse,
                     quizAnswer: quizAnswer || null,
@@ -728,6 +746,15 @@
                         readingCount: currentCount + 1,
                         age: readerAge ? parseInt(readerAge) : userSnap.data().age,
                         governorate: readerGov || userSnap.data().governorate,
+                        lastActive: serverTimestamp()
+                    });
+                } else {
+                    await setDoc(userRef, {
+                        userId: userId,
+                        readingCount: 1,
+                        coins: 0,
+                        age: readerAge ? parseInt(readerAge) : null,
+                        governorate: readerGov || null,
                         lastActive: serverTimestamp()
                     });
                 }
